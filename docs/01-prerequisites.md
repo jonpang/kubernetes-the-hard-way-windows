@@ -7,12 +7,14 @@ This tutorial leverages the [Google Cloud Platform](https://cloud.google.com/) t
 [Estimated cost](https://cloud.google.com/products/calculator#id=873932bc-0840-4176-b0fa-a8cfd4ca61ae) to run this tutorial: $0.23 per hour ($5.50 per day).
 
 > The compute resources required for this tutorial exceed the Google Cloud Platform free tier.
+> Shutting down the computes overnight or completing the entire tutorial in 1 sitting can reduce cost
 
 ## Google Cloud Platform SDK
 
 ### Install the Google Cloud SDK
 
 Follow the Google Cloud SDK [documentation](https://cloud.google.com/sdk/) to install and configure the `gcloud` command line utility.
+https://cloud.google.com/sdk/docs/quickstart Quickstart Link for download package and steps.
 
 Verify the Google Cloud SDK version is 301.0.0 or higher:
 
@@ -29,8 +31,9 @@ If you are using the `gcloud` command-line tool for the first time `init` is the
 ```
 gcloud init
 ```
+Running this command will prompt you to login using your Google user account.
 
-Then be sure to authorize gcloud to access the Cloud Platform with your Google user credentials:
+Alternatively authorize gcloud to access the Cloud Platform with your Google user credentials:
 
 ```
 gcloud auth login
@@ -59,5 +62,7 @@ gcloud config set compute/zone us-west1-c
 ![tmux screenshot](images/tmux-screenshot.png)
 
 > Enable synchronize-panes by pressing `ctrl+b` followed by `shift+:`. Next type `set synchronize-panes on` at the prompt. To disable synchronization: `set synchronize-panes off`.
+
+Alternatively, can also launch multiple Google Cloud SDK Shells.
 
 Next: [Installing the Client Tools](02-client-tools.md)
