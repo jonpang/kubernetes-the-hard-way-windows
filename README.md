@@ -1,10 +1,7 @@
-# Kubernetes The Hard Way
-
-This tutorial walks you through setting up Kubernetes the hard way. This guide is not for people looking for a fully automated command to bring up a Kubernetes cluster. If that's you then check out [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine), or the [Getting Started Guides](https://kubernetes.io/docs/setup).
-
-Kubernetes The Hard Way is optimized for learning, which means taking the long route to ensure you understand each task required to bootstrap a Kubernetes cluster.
-
-> The results of this tutorial should not be viewed as production ready, and may receive limited support from the community, but don't let that stop you from learning!
+# Kubernetes The Hard Way - Windows Addon
+This page is based on [Kubernetes The Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way/) guide created by Kelsey Hightower.
+Primary adjustments made have been using a local Windows PC to administer and execute commands, and setting up Windows environment to support this.
+Objective is to follow along with the guide while not using an OS X or Linux based PC.
 
 ## Copyright
 
