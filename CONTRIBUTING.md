@@ -16,3 +16,7 @@ Here are some examples of the review and justification process:
 
 If you find a bug that breaks the guide, please do submit it. If you are considering  a minor copy edit for tone, grammar, or simple inconsistent whitespace, consider the tradeoff between maintainer time and community benefit before investing too much of your time.
 
+
+## Addendum on Windows Variant
+
+Almost all sections are same as the original. Primary changes are documenting PowerShell or Windows specific commands.
