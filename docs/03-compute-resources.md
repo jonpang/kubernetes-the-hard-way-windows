@@ -24,31 +24,59 @@ A [subnet](https://cloud.google.com/compute/docs/vpc/#vpc_networks_and_subnets) 
 
 Create the `kubernetes` subnet in the `kubernetes-the-hard-way` VPC network:
 
+If Bash:
 ```
 gcloud compute networks subnets create kubernetes \
   --network kubernetes-the-hard-way \
   --range 10.240.0.0/24
 ```
-
+If PowerShell:
+```
+gcloud compute networks subnets create kubernetes  `
+  --network kubernetes-the-hard-way  `
+  --range 10.240.0.0/24
+```
+If Google Cloud SDK Shell:
+```
+gcloud compute networks subnets create kubernetes  --network kubernetes-the-hard-way --range 10.240.0.0/24
+```
 > The `10.240.0.0/24` IP address range can host up to 254 compute instances.
+
 
 ### Firewall Rules
 
 Create a firewall rule that allows internal communication across all protocols:
 
+If Bash:
 ```
 gcloud compute firewall-rules create kubernetes-the-hard-way-allow-internal \
   --allow tcp,udp,icmp \
   --network kubernetes-the-hard-way \
   --source-ranges 10.240.0.0/24,10.200.0.0/16
 ```
+If PowerShell:
+```
+gcloud compute firewall-rules create kubernetes-the-hard-way-allow-internal `
+  --allow tcp,udp,icmp `
+  --network kubernetes-the-hard-way `
+  --source-ranges 10.240.0.0/24,10.200.0.0/16
+```
 
 Create a firewall rule that allows external SSH, ICMP, and HTTPS:
 
+Bash:
 ```
 gcloud compute firewall-rules create kubernetes-the-hard-way-allow-external \
   --allow tcp:22,tcp:6443,icmp \
   --network kubernetes-the-hard-way \
+  --source-ranges 0.0.0.0/0
+```
+
+PowerShell:
+```
+gcloud compute firewall-rules create kubernetes-the-hard-way-allow-external `
+  --allow tcp:22,tcp:6443,icmp `
+  --network kubernetes-the-hard-way `
   --source-ranges 0.0.0.0/0
 ```
 
@@ -71,9 +99,14 @@ kubernetes-the-hard-way-allow-internal  kubernetes-the-hard-way  INGRESS    1000
 ### Kubernetes Public IP Address
 
 Allocate a static IP address that will be attached to the external load balancer fronting the Kubernetes API Servers:
-
+Bash:
 ```
 gcloud compute addresses create kubernetes-the-hard-way \
+  --region $(gcloud config get-value compute/region)
+```
+PowerShell:
+```
+gcloud compute addresses create kubernetes-the-hard-way `
   --region $(gcloud config get-value compute/region)
 ```
 
@@ -97,7 +130,7 @@ The compute instances in this lab will be provisioned using [Ubuntu Server](http
 ### Kubernetes Controllers
 
 Create three compute instances which will host the Kubernetes control plane:
-
+Bash:
 ```
 for i in 0 1 2; do
   gcloud compute instances create controller-${i} \
@@ -113,7 +146,23 @@ for i in 0 1 2; do
     --tags kubernetes-the-hard-way,controller
 done
 ```
-
+PowerShell:
+```
+for($i=0; $i -lt 3; $i++)
+{
+  gcloud compute instances create controller-$i `
+    --async `
+    --boot-disk-size 200GB `
+    --can-ip-forward `
+    --image-family ubuntu-2004-lts `
+    --image-project ubuntu-os-cloud `
+    --machine-type e2-standard-2 `
+    --private-network-ip 10.240.0.1$i `
+    --scopes compute-rw,storage-ro,service-management,service-control,logging-write,monitoring `
+    --subnet kubernetes `
+    --tags kubernetes-the-hard-way,controller
+}
+```
 ### Kubernetes Workers
 
 Each worker instance requires a pod subnet allocation from the Kubernetes cluster CIDR range. The pod subnet allocation will be used to configure container networking in a later exercise. The `pod-cidr` instance metadata will be used to expose pod subnet allocations to compute instances at runtime.
@@ -122,6 +171,7 @@ Each worker instance requires a pod subnet allocation from the Kubernetes cluste
 
 Create three compute instances which will host the Kubernetes worker nodes:
 
+Bash:
 ```
 for i in 0 1 2; do
   gcloud compute instances create worker-${i} \
@@ -137,6 +187,24 @@ for i in 0 1 2; do
     --subnet kubernetes \
     --tags kubernetes-the-hard-way,worker
 done
+```
+PowerShell:
+```
+for($i=0; $i -lt 3; $i++)
+{
+  gcloud compute instances create worker-$i `
+    --async `
+    --boot-disk-size 200GB `
+    --can-ip-forward `
+    --image-family ubuntu-2004-lts `
+    --image-project ubuntu-os-cloud `
+    --machine-type e2-standard-2 `
+    --metadata pod-cidr=10.200.$i.0/24 `
+    --private-network-ip 10.240.0.2$i `
+    --scopes compute-rw,storage-ro,service-management,service-control,logging-write,monitoring `
+    --subnet kubernetes `
+    --tags kubernetes-the-hard-way,worker
+}
 ```
 
 ### Verification
